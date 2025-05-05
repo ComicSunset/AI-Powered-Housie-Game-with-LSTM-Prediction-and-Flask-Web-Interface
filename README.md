@@ -1,1 +1,1 @@
-# AI-Powered-Housie-Game-with-LSTM-Prediction-and-Flask-Web-Interface
+## 🎲 AI-Powered Housie Game 🧠 with LSTM Prediction and Flask Web Interface 🌐
