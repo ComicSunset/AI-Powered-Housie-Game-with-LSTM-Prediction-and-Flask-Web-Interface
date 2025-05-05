@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housie Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .card {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 10px;
+            margin-bottom: 20px;
+        }
+        .card span {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+        }
+        .marked {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .winner {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Housie Game</h1>
+    <h3>Player 1's Card</h3>
+    <div class="card" id="player1_card"></div>
+
+    <h3>Player 2's Card</h3>
+    <div class="card" id="player2_card"></div>
+
+    <button onclick="callNumber()">Call Next Number</button>
+
+    <h3 id="called_number"></h3>
+    <h3 class="winner" id="winner"></h3>
+
+    <script>
+        // Function to update the card display
+        function updateCard(cardId, cardData) {
+            const cardElement = document.getElementById(cardId);
+            cardElement.innerHTML = '';
+            for (let i = 0; i < cardData.length; i++) {
+                for (let j = 0; j < cardData[i].length; j++) {
+                    const span = document.createElement('span');
+                    span.textContent = cardData[i][j] === 0 ? 'X' : cardData[i][j];
+                    if (cardData[i][j] === 0) {
+                        span.classList.add('marked');
+                    }
+                    cardElement.appendChild(span);
+                }
+            }
+        }
+
+        // Call the next number and update the game state
+        function callNumber() {
+            fetch('/call_number')
+                .then(response => response.json())
+                .then(data => {
+                    // Display called number
+                    document.getElementById('called_number').textContent = 'Number Called: ' + data.number;
+
+                    // Update cards
+                    updateCard('player1_card', data.player1_card);
+                    updateCard('player2_card', data.player2_card);
+
+                    // Display winner if any
+                    if (data.winner) {
+                        document.getElementById('winner').textContent = data.winner;
+                    }
+                });
+        }
+    </script>
+
+</body>
+</html>
